@@ -1,0 +1,68 @@
+#pragma once
+#include <iostream>
+#include "clsScreen.h"
+#include "clsCurrency.h"
+#include "clsInputValidate.h"
+class clsUpdateCurrencyScreen :protected clsScreen
+{
+private:
+
+	static float _ReadRate()
+	{
+		cout << "\nEnter New Rate? ";
+		float NewRate = 0;
+		NewRate = clsInputValidate::ReadFloatNumber();
+		return NewRate;
+
+	}
+
+	static void _PrintCurrency(clsCurrency Currency)
+	{
+		cout << "\nCurrency Card:\n";
+		cout << "________________________________________________\n";
+		cout << "\nCountry     : " << Currency.Country();
+		cout << "\nCode        : " << Currency.CurrencyCode();
+		cout << "\nName        : " << Currency.CurrencyName();
+		cout << "\nRate (1$) = : " << Currency.Rate();
+		cout << "\n________________________________________________\n";
+	}
+
+
+public:
+
+	static void ShowUpdateCurrencyScreen()
+	{
+		_DrawScreenHeader("Update Currency Screen ");
+		string CurrencyCode = " ";
+		cout << "\nPlease Enter Currency Code: ";
+		CurrencyCode = clsInputValidate::ReadString();
+	
+		while (!clsCurrency::IsCurrencyExist(CurrencyCode))
+		{
+			cout << "\nCurrency is not found, choose another one:";
+			CurrencyCode = clsInputValidate::ReadString();
+		}
+
+		clsCurrency Currency = clsCurrency::FindByCode(CurrencyCode);
+			_PrintCurrency(Currency);
+			
+			cout << "\nAre you Sure you want to update the rate of this Currency y/n? ";
+			char answer = 'n';
+			cin >> answer;
+			if (answer == 'Y' || answer == 'y')
+			{
+				cout << "\n\nUpdate Currency Rate ";
+
+				cout << "\n_______________________\n";
+
+				Currency.UpdateRate(_ReadRate());
+				cout << "\nCurrency Rate Update is Successfully :-)";
+				_PrintCurrency(Currency);
+
+			}
+		
+		}
+	
+};
+
+
