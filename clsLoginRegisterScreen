@@ -1,0 +1,71 @@
+#pragma once
+#include <iostream>
+#include "clsScreen.h"
+#include "clsUser.h"
+#include <iomanip>
+#include "clsDate.h"
+class clsLoginRegisterScreen: protected clsScreen
+{
+private:
+
+	static void PrintLoginRegisterRecordLine(clsUser::stLoginRegisterRecord LoginRegisterRecord)
+	{
+		cout << "| " << setw(30) << left << LoginRegisterRecord.DateTime;
+		cout << "| " << setw(20) << left << LoginRegisterRecord.UserName;
+		cout << "| " << setw(20) << left << LoginRegisterRecord.Passwort;
+		cout << "| " << setw(10) << left << LoginRegisterRecord.Permissions;
+
+	}
+
+public:
+
+	static void ShowLoginRegisterScreen()
+	{
+		
+
+		if (!CheckAccessRights(clsUser::enPermissions::pShowLogInRegister))
+		{
+			return;// this will exit the function and it will not continue
+		}
+
+		system("cls");
+		vector<clsUser::stLoginRegisterRecord> vLoginRegisterRecord= clsUser::GetLoginRegisterList();
+		string Title = "\tLogin Register List Screen";
+		string SubTiltle = "\t\t(" + to_string(vLoginRegisterRecord.size()) + ") Record(s).";
+		_DrawScreenHeader(Title, SubTiltle);
+
+		
+
+		cout << setw(8) << left << "" << "\n\_______________________________________________________";
+		cout << "_________________________________________\n" << endl;
+
+		cout << "| " << left << setw(30) << "Date Time";
+		cout << "| " << left << setw(20) << "UserName";
+		cout << "| " << left << setw(20) << "Passwort";
+		cout << "| " << left << setw(10) << "Permission";
+
+		cout << setw(8) << left << "" << "\n_______________________________________________________";
+		cout << "_________________________________________\n" << endl;
+
+		if (vLoginRegisterRecord.size() == 0)
+		{
+			cout << "\t\t\t\tNo Logins Available In the System!";
+		}
+		else
+		{
+			for (clsUser::stLoginRegisterRecord Record :vLoginRegisterRecord)
+			{
+				PrintLoginRegisterRecordLine(Record);
+				cout << endl;
+			}
+		}
+
+		cout << setw(8) << left << "" << "\n_______________________________________________________";
+		cout << "_________________________________________\n" << endl;
+
+	}
+
+
+};
+
+
