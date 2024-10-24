@@ -1,0 +1,68 @@
+#pragma once
+#include <iostream>
+#include "clsScreen.h"
+#include <iomanip>
+#include "clsBankClient.h"
+
+
+
+class clsTransferLogScreen :protected clsScreen
+{
+
+private:
+
+	static void _PrintTransferLog(clsBankClient::stTransferRecord Register)
+	{
+		cout << setw(8) << left << "" << "| " << setw(23) << left << Register.DateTime;
+		cout << "| " << setw(8) << left << Register.SourceAccountNumber;
+		cout << "| " << setw(8) << left << Register.DestinationAccountNumber;
+		cout << "| " << setw(8) << left << Register.Amount;
+		cout << "| " << setw(10) << left << Register.srcBalanceAfter;
+		cout << "| " << setw(10) << left << Register.destBalanceAfter;
+		cout << "| " << setw(8) << left << Register.UserName;
+
+	}
+
+public:
+	static void ShowTransferLog()
+	{
+		vector<clsBankClient::stTransferRecord>vTransferLogRecord;
+		vTransferLogRecord = clsBankClient::GetTransfersLogList();
+		string Title = "\tTransfer Log List Screen";
+		string SubTitle = "\t    (" + to_string(vTransferLogRecord.size()) + ") Record(s).";
+
+		_DrawScreenHeader(Title, SubTitle);
+		cout << setw(8) << left << "" << "\n\t_______________________________________________________";
+		cout << "_________________________________________\n";
+		cout << setw(8) << left << "" << "| " << left << setw(23) << "Date/Time";
+		cout << "| " << left << setw(8) << "S.Acc";
+		cout << "| " << left << setw(8) << "D.Acc";
+		cout << "| " << left << setw(8) << "Amount";
+		cout << "| " << left << setw(10) << "S.Balance";
+		cout << "| " << left << setw(10) << "D.Balance";
+		cout << "| " << left << setw(8) << "User";
+		cout << setw(8) << left << "" << "\n\t_______________________________________________________";
+		cout << "_________________________________________\n" << endl;
+
+		if (vTransferLogRecord.size() == 0)
+		{
+			cout << "\t\t\t\tNo Transfers Available In the System!";
+		}
+		else
+		{
+			for (clsBankClient::stTransferRecord Register : vTransferLogRecord)
+			{
+
+				_PrintTransferLog(Register);
+				cout << endl;
+			}
+			cout << setw(8) << left << "" << "\n\t_______________________________________________________";
+			cout << "_________________________________________\n" << endl;
+		}
+
+
+}
+
+};
+
+
